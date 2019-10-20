@@ -52,7 +52,7 @@ spec:
   loadBalancerIP: 10.13.8.25
   externalTrafficPolicy: Local
   ports:
-    - name: murmur-admin-tcp
+    - name: murmur-grpc-tcp
       port: 50051
       protocol: TCP
   selector:
