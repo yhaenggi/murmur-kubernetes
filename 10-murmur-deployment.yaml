@@ -14,7 +14,7 @@ spec:
         app: murmur
     spec:
       containers:
-      - image: registry.traefik.k8.darkgamex.ch/murmur:1.3.0
+      - image: yhaenggi/murmur:1.3.0
         imagePullPolicy: Always
         name: murmur-container
         stdin: true 
