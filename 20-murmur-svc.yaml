@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: murmur-service-udp
+  namespace: murmur
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+  labels:
+    app: murmur
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.13.8.25
+  externalTrafficPolicy: Local
+  ports:
+    - name: murmur-udp
+      port: 64738
+      protocol: UDP
+  selector:
+    app: murmur
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: murmur-service-tcp
+  namespace: murmur
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+  labels:
+    app: murmur
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.13.8.25
+  externalTrafficPolicy: Local
+  ports:
+    - name: murmur-tcp
+      port: 64738
+      protocol: TCP
+  selector:
+    app: murmur
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: murmur-service-grpc-tcp
+  namespace: murmur
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+  labels:
+    app: murmur
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.13.8.25
+  externalTrafficPolicy: Local
+  ports:
+    - name: murmur-admin-tcp
+      port: 50051
+      protocol: TCP
+  selector:
+    app: murmur

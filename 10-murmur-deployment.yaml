@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: murmur-deployment
+  labels:
+    app: murmur
+spec:
+  selector:
+    matchLabels:
+      app: murmur
+  template:
+    metadata:
+      labels:
+        app: murmur
+    spec:
+      containers:
+      - image: registry.traefik.k8.darkgamex.ch/murmur:1.3.0
+        imagePullPolicy: Always
+        name: murmur-container
+        stdin: true 
+        tty: true 
+        ports:
+        # gRPC
+        - containerPort: 50051
+        # UDP/TCP murmur
+        - containerPort: 64738
+        readinessProbe:
+          tcpSocket:
+            port: 64738
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 64738
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        volumeMounts:
+        - mountPath: /home/murmur/.murmur
+          name: murmur-folder
+        - mountPath: /home/murmur/.murmur/ssl
+          name: murmur-ssl
+        - mountPath: /home/murmur/.murmur/db
+          name: murmur-db
+        - mountPath: /home/murmur/.murmur/murmur.ini
+          name: murmur-config
+          subPath: murmur.ini
+        securityContext:
+          runAsUser: 911
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      volumes:
+      - name: murmur-folder
+        emptyDir: {}
+      - name: murmur-ssl
+        secret:
+          secretName: murmur-ssl
+      - name: murmur-db
+        persistentVolumeClaim:
+          claimName: murmur-db
+      - name: murmur-config
+        configMap:
+          name: murmur-config
