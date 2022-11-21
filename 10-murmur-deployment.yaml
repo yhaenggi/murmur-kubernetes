@@ -14,7 +14,7 @@ spec:
         app: murmur
     spec:
       containers:
-      - image: yhaenggi/murmur:1.3.4
+      - image: yhaenggi/murmur:1.4.287
         imagePullPolicy: Always
         name: murmur-container
         stdin: true 
